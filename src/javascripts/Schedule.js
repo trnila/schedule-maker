@@ -4,7 +4,12 @@ import request from 'superagent';
 
 class Row extends React.Component {
 	render() {
-		console.log(this.props.hours);
+		function getClass(hour) {
+			if(!hour.lectors) {
+				return 'empty';
+			}
+			return hour.id.startsWith('P') ? 'lecture' : 'class';
+		}
 
 		var hours = [];
 		var first = true;
@@ -19,7 +24,7 @@ class Row extends React.Component {
 				if(n < this.props.hours.length && this.props.hours[n].start == i) {
 					let hour = this.props.hours[n];
 					hours.push(
-						<td colSpan={hour.len} className={hour.id.startsWith('P') ? 'lecture' : 'class'}>
+						<td colSpan={hour.len} className={getClass(hour)}>
 							{hour.name} <br />
 							{hour.start} - {hour.len}<br />
 							{hour.lectors}
@@ -92,6 +97,16 @@ export default class extends React.Component {
 							state.days[json[day].day].push(json[day]);
 
 							state.days[json[day].day].sort((a, b) => {
+								if(a.start == b.start) {
+									if(a.lectors && b.lectors) {
+										return 0;
+									} else if(a.lectors) {
+										return -1;
+									} else {
+										return 1;
+									}
+								}
+
 								return a.start < b.start ? -1 : 1;
 							});
 						}
@@ -119,7 +134,7 @@ export default class extends React.Component {
 		}
 
 		return (
-			<div>
+			<div className="schedule">
 				<table className="table table-responsive table-bordered">
 					<thead>
 						<tr>
