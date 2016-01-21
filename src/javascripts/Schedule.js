@@ -19,7 +19,7 @@ class Row extends React.Component {
 				if(n < this.props.hours.length && this.props.hours[n].start == i) {
 					let hour = this.props.hours[n];
 					hours.push(
-						<td colSpan={hour.len}>
+						<td colSpan={hour.len} className={hour.id.startsWith('P') ? 'lecture' : 'class'}>
 							{hour.name} <br />
 							{hour.start} - {hour.len}<br />
 							{hour.lectors}
