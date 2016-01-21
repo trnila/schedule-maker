@@ -137,10 +137,15 @@ export default class extends React.Component {
 				<table className="table table-responsive table-bordered table-sm">
 					<thead>
 						<tr>
-							<td></td>
+							<th></th>
 							{tds}
 						</tr>
 					</thead>
+
+					<tbody>
+						<th></th>
+						{tds}
+					</tbody>
 					{daysEl}
 				</table>
 			</div>
