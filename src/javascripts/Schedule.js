@@ -2,6 +2,8 @@
 import React from 'react';
 import request from 'superagent';
 
+let days = ['Po', 'Ut', 'St', 'Ct'];
+
 class Row extends React.Component {
 	render() {
 		function getClass(hour) {
@@ -17,7 +19,7 @@ class Row extends React.Component {
 		for(var i = -1; i < 14; i++) {
 			if(first) {
 				if(this.props.row == 0) {
-					hours.push(<td rowSpan={this.props.rows}>{this.props.day}</td>);
+					hours.push(<td rowSpan={this.props.rows}>{days[this.props.day]}</td>);
 				}
 				first = false;
 			} else {
@@ -25,9 +27,8 @@ class Row extends React.Component {
 					let hour = this.props.hours[n];
 					hours.push(
 						<td colSpan={hour.len} className={getClass(hour)}>
-							{hour.name} <br />
-							{hour.start} - {hour.len}<br />
-							{hour.lectors}
+							{hour.name}
+							<small className="pull-right">{hour.lectors}</small>
 						</td>);
 					i += hour.len - 1;
 					n++;
@@ -38,7 +39,7 @@ class Row extends React.Component {
 		}
 
 		return (
-			<tr>
+			<tr className={this.props.day % 2 == 0 ? 'day-even' : 'day-odd'}>
 				{hours}
 			</tr>);
 	}
@@ -126,16 +127,14 @@ export default class extends React.Component {
 			tds.push(<th key={hour}>{hours[hour]}</th>);
 		}
 
-		let days = ['Po', 'Ut', 'St', 'Ct'];
 		var daysEl = [];
-		//daysEl.push(<Day key={1} day={days[0]} hours={this.state.days[0]} />);
 		for(var i = 0; i < days.length; i++) {
-			daysEl.push(<Day day={days[i]} hours={this.state.days[i]} />);
+			daysEl.push(<Day day={i} hours={this.state.days[i]} />);
 		}
 
 		return (
 			<div className="schedule">
-				<table className="table table-responsive table-bordered">
+				<table className="table table-responsive table-bordered table-sm">
 					<thead>
 						<tr>
 							<td></td>
