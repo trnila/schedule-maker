@@ -5,7 +5,7 @@
   "main": "-",
   "scripts": {
     "dev": "./node_modules/.bin/webpack-dev-server --content-base src",
-	"build": "NODE_ENV=production ./node_modules/.bin/webpack -p --progress --colors"
+	"build": "NODE_ENV=production ./node_modules/.bin/webpack -p --progress --colors && cp src/index.html build"
   },
   "devDependencies": {
     "babel-core": "^6.4.5",
