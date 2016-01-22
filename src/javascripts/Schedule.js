@@ -1,6 +1,7 @@
 'use strict';
 import React from 'react';
 import request from 'superagent';
+import Subjects from './Subjects';
 
 let days = ['Po', 'Ut', 'St', 'Ct'];
 
@@ -19,21 +20,21 @@ class Row extends React.Component {
 		for(var i = -1; i < 14; i++) {
 			if(first) {
 				if(this.props.row == 0) {
-					hours.push(<td rowSpan={this.props.rows}>{days[this.props.day]}</td>);
+					hours.push(<td rowSpan={this.props.rows} key={i}>{days[this.props.day]}</td>);
 				}
 				first = false;
 			} else {
 				if(n < this.props.hours.length && this.props.hours[n].start == i) {
 					let hour = this.props.hours[n];
 					hours.push(
-						<td colSpan={hour.len} className={getClass(hour)}>
+						<td colSpan={hour.len} className={getClass(hour)} key={i}>
 							{hour.name}
 							<small className="pull-right">{hour.lectors}</small>
 						</td>);
 					i += hour.len - 1;
 					n++;
 				} else {
-					hours.push(<td></td>);
+					hours.push(<td key={i}></td>);
 				}
 			}
 		}
@@ -78,23 +79,37 @@ class Day extends React.Component {
 }
 
 export default class extends React.Component {
+	static propTypes = {
+		subjects: React.PropTypes.arrayOf(React.PropTypes.string).isRequired
+	};
+
 	constructor(props) {
 		super(props);
 		this.state = {days: [[], [], [], [], [], []]};
 	}
 
-	componentDidMount() {
-		var items = {
-			'12345': 'Subject',
-		};
+	componentWillReceiveProps(props) {
+		this.setSubjects(props.subjects);
+		this.forceUpdate();
+	}
+
+	clear() {
+		this.setState((state) => {
+			state.days = [[], [], [], [], [], []];
+			return state;
+		});
+	}
+
+	setSubjects(items) {
+		this.clear();
 
 		for(let i in items) {
-			request.get('/' + i + '.json')
+			request.get('/' + items[i] + '.json')
 				.end((err, res) => {
 					var json = JSON.parse(res.text);
 					this.setState((state) => {
 						for (let day in json) {
-							json[day].name = items[i];
+							json[day].name = Subjects.getSubject(items[i]).abbr;
 							state.days[json[day].day].push(json[day]);
 
 							state.days[json[day].day].sort((a, b) => {
@@ -129,7 +144,7 @@ export default class extends React.Component {
 
 		var daysEl = [];
 		for(var i = 0; i < days.length; i++) {
-			daysEl.push(<Day day={i} hours={this.state.days[i]} />);
+			daysEl.push(<Day key={i} day={i} hours={this.state.days[i]} />);
 		}
 
 		return (
@@ -143,8 +158,10 @@ export default class extends React.Component {
 					</thead>
 
 					<tbody>
-						<th></th>
-						{tds}
+						<tr>
+							<th></th>
+							{tds}
+						</tr>
 					</tbody>
 					{daysEl}
 				</table>
