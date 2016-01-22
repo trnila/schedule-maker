@@ -1,4 +1,4 @@
-import data from './subjects';
+import data from './../data/subjects';
 
 export default {
 	getSubjects() {

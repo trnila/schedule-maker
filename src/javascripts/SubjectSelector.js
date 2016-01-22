@@ -48,7 +48,7 @@ export default class extends React.Component {
 		}
 
 		return <div className="subject-selector">
-			<Select options={this.props.subjects.map((i) => {return {value: i.id, label: i.name};})}
+			<Select options={this.props.subjects.map((i) => {return {value: i.id, label: i.name + "(" + i.abbr + ")"};})}
 					value={this.state.selected}
 					multi={true}
 					placeholder="Předměty v rozvrhu"

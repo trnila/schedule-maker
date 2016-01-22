@@ -104,7 +104,7 @@ export default class extends React.Component {
 		this.clear();
 
 		for(let i in items) {
-			request.get('/' + items[i] + '.json')
+			request.get('/data/' + items[i] + '.json')
 				.end((err, res) => {
 					var json = JSON.parse(res.text);
 					this.setState((state) => {
