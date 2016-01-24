@@ -253,19 +253,13 @@ export default class extends React.Component {
 		return (
 			<div className="schedule table-responsive">
 				<table className="table table-bordered table-sm">
-					<thead>
+					<thead className="thead-default">
 						<tr>
 							<th></th>
 							{tds}
 						</tr>
 					</thead>
 
-					<tbody>
-						<tr>
-							<th></th>
-							{tds}
-						</tr>
-					</tbody>
 					{daysEl}
 				</table>
 			</div>
