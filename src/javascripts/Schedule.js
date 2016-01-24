@@ -147,10 +147,26 @@ export default class extends React.Component {
 
 	constructor(props) {
 		super(props);
+		
+		var selected = [];
+		if(document.location.hash.length > 1) {
+			selected = document.location.hash.substr(1).split(";").map((i) => {
+				var parts = i.split('|');
+				return {
+					subjectId: parts[0],
+					id: parts[1]
+				};
+			});
+		}
+
+		if(!selected.length) {
+			selected = localStorage.selected ? JSON.parse(localStorage.selected) : []
+		}
+
 		this.state = {
 			days: [[], [], [], [], [], []],
 			highlighted: null,
-			selected: []
+			selected: selected
 		};
 	}
 
@@ -183,6 +199,12 @@ export default class extends React.Component {
 					state.selected.splice(i, 1);
 				}
 			}
+
+			localStorage.selected = JSON.stringify(state.selected);
+
+			window.location.hash = '#' + state.selected.map((i) => {
+				return i.subjectId + '|' + i.id;
+			}).join(';');
 
 			return state;
 		});
