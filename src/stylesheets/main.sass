@@ -3,13 +3,13 @@
 		background-color: #f9f9f9
 
 	.lecture
-		background: indianred
+		background-color: indianred
 
 	.class
-		background: lightgreen
+		background-color: lightgreen
 
 	.empty
-		background: gray
+		background-color: gray
 
 	thead
 	  position: fixed
@@ -18,3 +18,13 @@
 
 	th:nth-of-type(1)
 		width: 30px
+
+	td
+		opacity: 0.4
+		transition: background-color 500ms, opacity 500ms
+
+		&.highlighted
+		  background-color: yellow
+
+		&.selected
+		  opacity: 1.0
