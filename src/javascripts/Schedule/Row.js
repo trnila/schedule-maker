@@ -21,11 +21,12 @@ export default class Row extends React.Component {
 					hours.push(
 						<Class key={i}
 						       id={hour.id}
+						       subjectId={hour.subjectId}
 						       start={hour.start}
 						       len={hour.len}
 						       name={hour.name}
 						       lectors={hour.lectors ? hour.lectors : []}
-						       selected={this.props.selected.filter((i) => {return i.subjectId == hour.name && i.id == hour.id;}).length}
+						       selected={this.props.selected.filter((i) => {return i.subjectId == hour.subjectId && i.id == hour.id;}).length}
 						       highlighted={this.props.highlighted == hour.name}
 						       onHighlightSubject={this.props.onHighlightSubject}
 						       onSubjectSelect={this.props.onSubjectSelect}

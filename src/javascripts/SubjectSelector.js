@@ -16,36 +16,9 @@ export default class extends React.Component {
 		onSubjectChange: function(){}
 	};
 
-	constructor(props) {
-		super(props);
-		this.state = {
-			selected: this.getSelectedSubjects()
-		};
-	}
-
-	componentDidMount() {
-		this.props.onSubjectChange(this.getSelectedSubjects());
-	}
-
-	getSelectedSubjects() {
-		return typeof(localStorage.subjects) == "string" ? localStorage.subjects.split(",") : [];
-	}
-
-	saveSubjects(subjects) {
-		localStorage.subjects = subjects;
-		this.props.onSubjectChange(subjects);
-	}
-
 	render() {
 		function onChange(val) {
-			this.setState((state) => {
-				state.selected = val.map((item) => {
-					return item.value;
-				});
-				this.saveSubjects(state.selected);
-				return state;
-			});
-
+			this.props.onSubjectChange(val);
 			this.refs.selector.closeMenu();
 		}
 
@@ -69,7 +42,7 @@ export default class extends React.Component {
 			<Select ref="selector"
 			        onInputChange={onInputChange.bind(this)}
 			        options={options}
-					value={this.state.selected}
+					value={this.props.selected}
 					multi={true}
 					valueRenderer={valueRenderer}
 			        placeholder="Předměty v rozvrhu"

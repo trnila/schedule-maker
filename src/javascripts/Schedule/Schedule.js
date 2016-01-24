@@ -13,64 +13,25 @@ export default class extends React.Component {
 	constructor(props) {
 		super(props);
 
-		var selected = [];
-		if(document.location.hash.length > 1) {
-			selected = document.location.hash.substr(1).split(";").map((i) => {
-				var parts = i.split('|');
-				return {
-					subjectId: parts[0],
-					id: parts[1]
-				};
-			});
-		}
-
-		if(!selected.length) {
-			selected = localStorage.selected ? JSON.parse(localStorage.selected) : []
-		}
-
 		this.state = {
 			days: [[], [], [], [], [], []],
-			highlighted: null,
-			selected: selected
+			highlighted: null
 		};
 	}
 
+	componentDidMount() {
+		this.setSubjects(this.props.subjects);
+	}
+
 	componentWillReceiveProps(props) {
-		this.setSubjects(props.subjects);
+		if(props.subjects != this.props.subjects) {
+			this.setSubjects(props.subjects);
+		}
 	}
 
 	clear() {
 		this.setState((state) => {
 			state.days = [[], [], [], [], [], []];
-			return state;
-		});
-	}
-
-	addSubject(subjectId, id, selected) {
-		this.setState((state) => {
-			if(selected) {
-				if(!state.selected.filter((i) => {return i.subjectId == subjectId && i.id == id;}).length) {
-					state.selected.push({subjectId: subjectId, id: id});
-				}
-			} else {
-				var i;
-				for(i in state.selected) {
-					if(state.selected[i].subjectId == subjectId && state.selected[i].id == id) {
-						break;
-					}
-				}
-
-				if(i > -1) {
-					state.selected.splice(i, 1);
-				}
-			}
-
-			localStorage.selected = JSON.stringify(state.selected);
-
-			window.location.hash = '#' + state.selected.map((i) => {
-				return i.subjectId + '|' + i.id;
-			}).join(';');
-
 			return state;
 		});
 	}
@@ -92,6 +53,7 @@ export default class extends React.Component {
 					this.setState((state) => {
 						for (let day in json) {
 							json[day].name = Subjects.getSubject(items[i]).abbr;
+							json[day].subjectId = items[i];
 							state.days[json[day].day].push(json[day]);
 
 							state.days[json[day].day].sort((a, b) => {
@@ -130,9 +92,9 @@ export default class extends React.Component {
 				<Day key={i}
 				     day={i}
 				     hours={this.state.days[i]}
-				     selected={this.state.selected}
+				     selected={this.props.selectedClasses}
 				     highlighted={this.state.highlighted}
-				     onSubjectSelect={this.addSubject.bind(this)}
+				     onSubjectSelect={this.props.onSubjectSelect}
 				     onHighlightSubject={this.onHighlightSubject.bind(this)}
 				/>);
 		}

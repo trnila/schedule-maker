@@ -11,7 +11,7 @@ export default class Class extends React.Component {
 	};
 
 	onClick() {
-		this.props.onSubjectSelect(this.props.name, this.props.id, !this.props.selected);
+		this.props.onSubjectSelect(this.props.subjectId, this.props.id, !this.props.selected);
 	}
 
 	onHighlight(e) {
