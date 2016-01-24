@@ -1,144 +1,9 @@
 'use strict';
 import React from 'react';
 import request from 'superagent';
-import Subjects from './Subjects';
-
+import Subjects from './../Subjects';
+import Day from './Day';
 let days = ['Po', 'Ut', 'St', 'Ct'];
-
-class Class extends React.Component {
-	static propTypes = {
-		id: React.PropTypes.string.isRequired,
-		start: React.PropTypes.number.isRequired,
-		len: React.PropTypes.number.isRequired,
-		name: React.PropTypes.string.isRequired,
-		lectors: React.PropTypes.arrayOf(React.PropTypes.string).isRequired
-	};
-
-	onClick() {
-		this.props.onSubjectSelect(this.props.name, this.props.id, !this.props.selected);
-	}
-
-	onHighlight(e) {
-		e.preventDefault()
-		this.props.onHighlightSubject(this.props.name);
-	}
-
-	render() {
-		function getClass(hour) {
-			var result = ['occupied'];
-
-			if(!hour.lectors) {
-				result.push('empty');
-			} else {
-				result.push(hour.id.startsWith('P') ? 'lecture' : 'class');
-			}
-
-			if(hour.selected) {
-				result.push('selected');
-			}
-
-			if(hour.highlighted) {
-				result.push('highlighted');
-			}
-
-			return result;
-		}
-
-		return (
-		<td colSpan={this.props.len}
-		    className={getClass(this.props).join(' ')}
-		    onClick={this.onClick.bind(this)}
-		    onContextMenu={this.onHighlight.bind(this)}
-		>
-				{this.props.name}
-				<small className="pull-right">{this.props.lectors}</small>
-		</td>);
-	}
-}
-
-class Row extends React.Component {
-	render() {
-		var hours = [];
-		var first = true;
-		var n = 0;
-		for(var i = -1; i < 14; i++) {
-			if(first) {
-				if(this.props.row == 0) {
-					hours.push(<td rowSpan={this.props.rows} key={i}>{days[this.props.day]}</td>);
-				}
-				first = false;
-			} else {
-				if(n < this.props.hours.length && this.props.hours[n].start == i) {
-					let hour = this.props.hours[n];
-
-					hours.push(
-						<Class key={i}
-							   id={hour.id}
-							   start={hour.start}
-						       len={hour.len}
-						       name={hour.name}
-						       lectors={hour.lectors ? hour.lectors : []}
-						       selected={this.props.selected.filter((i) => {return i.subjectId == hour.name && i.id == hour.id;}).length}
-						       highlighted={this.props.highlighted == hour.name}
-						       onHighlightSubject={this.props.onHighlightSubject}
-						       onSubjectSelect={this.props.onSubjectSelect}
-						/>)
-					i += hour.len - 1;
-					n++;
-				} else {
-					hours.push(<td key={i}></td>);
-				}
-			}
-		}
-
-		return (
-			<tr className={this.props.day % 2 == 0 ? 'day-even' : 'day-odd'}>
-				{hours}
-			</tr>);
-	}
-}
-
-class Day extends React.Component {
-	render() {
-		let hours = this.props.hours;
-		var used = Array.apply(null, Array(hours.length)).map(function (_, i) {return false;});
-
-		var rows = [];
-		do {
-			var row = [];
-			for (var h = 0; h < 14; h++) {
-				for (var i = 0; i < hours.length; i++) {
-					let hour = hours[i];
-					if (!used[i] && hour.start == h) {
-						row.push(hour);
-
-						used[i] = true;
-						h += hour.len;
-					}
-				}
-			}
-			rows.push(row);
-		} while(used.filter((_) => {return !_;}).length);
-
-		return (
-			<tbody>
-				{rows.map((row, i) => {
-					return <Row
-						key={i}
-						hours={row}
-						day={this.props.day}
-						row={i}
-						rows={rows.length}
-						selected={this.props.selected}
-						highlighted={this.props.highlighted}
-						onHighlightSubject={this.props.onHighlightSubject}
-					    onSubjectSelect={this.props.onSubjectSelect}
-					/>
-				})}
-			</tbody>
-		);
-	}
-}
 
 export default class extends React.Component {
 	static propTypes = {
@@ -147,7 +12,7 @@ export default class extends React.Component {
 
 	constructor(props) {
 		super(props);
-		
+
 		var selected = [];
 		if(document.location.hash.length > 1) {
 			selected = document.location.hash.substr(1).split(";").map((i) => {

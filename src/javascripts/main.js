@@ -1,15 +1,13 @@
 'use strict';
 import ReactDOM from 'react-dom';
 import React from 'react';
-import Schedule from './Schedule';
+import Schedule from './Schedule/Schedule';
 import SubjectSelector from './SubjectSelector';
 import subjects from './Subjects';
 
 require('bootstrap/scss/bootstrap.scss');
 require('font-awesome/scss/font-awesome.scss');
 require('../stylesheets/main.sass');
-
-
 
 let div = document.createElement('div');
 document.body.appendChild(div);
