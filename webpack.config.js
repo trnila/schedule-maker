@@ -1,11 +1,12 @@
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
     context: __dirname + "/src",
     entry: "./javascripts/main.js",
     output: {
         path: __dirname + "/build",
-        filename: "bundle.js"
+        filename: "bundle-[hash].js"
     },
 	module: {
 		loaders: [
@@ -17,6 +18,9 @@ module.exports = {
 		]
 	},
 	plugins: [
-		new ExtractTextPlugin("bundle.css")
+		new ExtractTextPlugin("bundle-[hash].css"),
+		new HtmlWebpackPlugin({
+			'template': 'index.html'
+		})
 	]
 }
