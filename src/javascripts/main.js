@@ -29,6 +29,7 @@ class App extends React.Component {
 
 		if(!selected.length) {
 			selected = localStorage.selectedClasses ? JSON.parse(localStorage.selectedClasses) : []
+			this.saveToUrl(selected);
 		}
 
 		var subjects = selected.map((i) => {return i.subjectId;}).reduce(function(p, c) {
@@ -74,12 +75,15 @@ class App extends React.Component {
 			}
 
 			localStorage.selectedClasses = JSON.stringify(state.selectedClasses);
-			window.location.hash = '#' + state.selectedClasses.map((i) => {
-					return i.subjectId + '|' + i.id;
-			}).join(';');
-
+			this.saveToUrl(state.selectedClasses);
 			return state;
 		});
+	}
+
+	saveToUrl(selected){
+		window.location.hash = '#' + selected.map((i) => {
+			return i.subjectId + '|' + i.id;
+		}).join(';');
 	}
 
 	render() {
