@@ -45,14 +45,34 @@ export default class extends React.Component {
 				this.saveSubjects(state.selected);
 				return state;
 			});
+
+			this.refs.selector.closeMenu();
 		}
 
+		function onInputChange(value) {
+			if(!value) {
+				this.refs.selector.closeMenu();
+			}
+		}
+
+		function valueRenderer(subject) {
+			return subject.abbr;
+		};
+
+		var options = this.props.subjects.map((i) => {
+			i.label = `${i.id} ${i.name} (${i.abbr})`;
+			i.value = i.id;
+			return i;
+		});
+
 		return <div className="subject-selector">
-			<Select options={this.props.subjects.map((i) => {return {value: i.id, label: i.name + "(" + i.abbr + ")" +
-			 ""};})}
+			<Select ref="selector"
+			        onInputChange={onInputChange.bind(this)}
+			        options={options}
 					value={this.state.selected}
 					multi={true}
-					placeholder="Předměty v rozvrhu"
+					valueRenderer={valueRenderer}
+			        placeholder="Předměty v rozvrhu"
 					onChange={onChange.bind(this)} />
 		</div>
 	}
