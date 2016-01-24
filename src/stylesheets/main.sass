@@ -1,30 +1,35 @@
 .schedule
-	.day-even
-		background-color: #f9f9f9
-
-	.lecture
-		background-color: indianred
-
-	.class
-		background-color: lightgreen
-
-	.empty
-		background-color: gray
-
 	thead
-	  position: fixed
-	  background: white
-	  margin-top: -1px
+		position: fixed
+		background: white
+		margin-top: -1px
 
-	th:nth-of-type(1)
-		width: 30px
+		th:nth-of-type(1)
+	  		width: 30px
 
-	td
-		opacity: 0.4
-		transition: background-color 500ms, opacity 500ms
+	tbody
+		border-bottom: 4px solid #eceeef
 
-		&.highlighted
-		  background-color: yellow
+		td
+			transition: background-color 500ms, opacity 500ms
 
-		&.selected
-		  opacity: 1.0
+			&.occupied
+				opacity: 0.4
+
+			&.selected
+				opacity: 1.0
+
+			.day-even
+				background-color: #f9f9f9
+
+			&.lecture
+				background-color: indianred
+
+			&.class
+				background-color: lightgreen
+
+			&.empty
+				background-color: gray
+
+			&.highlighted
+				background-color: yellow

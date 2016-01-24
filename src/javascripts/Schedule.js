@@ -25,7 +25,7 @@ class Class extends React.Component {
 
 	render() {
 		function getClass(hour) {
-			var result = [];
+			var result = ['occupied'];
 
 			if(!hour.lectors) {
 				result.push('empty');
@@ -251,8 +251,8 @@ export default class extends React.Component {
 		}
 
 		return (
-			<div className="schedule">
-				<table className="table table-responsive table-bordered table-sm">
+			<div className="schedule table-responsive">
+				<table className="table table-bordered table-sm">
 					<thead>
 						<tr>
 							<th></th>
