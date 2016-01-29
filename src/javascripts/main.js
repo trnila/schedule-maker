@@ -51,6 +51,13 @@ class App extends React.Component {
 		this.setState((state) => {
 			state.selectedSubjects = subjects.map((i) => {return i.id;});
 			localStorage.selectedSubjects = state.selectedSubjects;
+
+			state.selectedClasses = state.selectedClasses.filter((i) => {
+				return state.selectedSubjects.indexOf(i.subjectId) > -1;
+			});
+			console.log(state);
+			this.persistSelectedClasses(state.selectedClasses);
+
 			return state;
 		});
 	}
@@ -74,16 +81,26 @@ class App extends React.Component {
 				}
 			}
 
-			localStorage.selectedClasses = JSON.stringify(state.selectedClasses);
-			this.saveToUrl(state.selectedClasses);
+			this.persistSelectedClasses(state.selectedClasses);
 			return state;
 		});
 	}
 
+	persistSelectedClasses(selectedClasses) {
+		localStorage.selectedClasses = JSON.stringify(selectedClasses);
+		this.saveToUrl(selectedClasses);
+	}
+
 	saveToUrl(selected){
-		window.location.hash = '#' + selected.map((i) => {
+		let params = selected.map((i) => {
 			return i.subjectId + '|' + i.id;
 		}).join(';');
+
+		if(params) {
+			window.location.hash = '#' + params;
+		} else {
+			window.location.hash = '';
+		}
 	}
 
 	render() {
